@@ -11,27 +11,40 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useLogin from "../../apis/Auth/useLogin";
 import useloggedInUser from "@/store/useLogin";
 
 export default function Login() {
   const redirect = useNavigate();
   const [loginData, setLoginData] = useState({ email: "", password: "" });
-  const { mutate: login, data, isSuccess, isError } = useLogin();
-  const setUserToken = useloggedInUser((state) => state.setUserToken);
+  const { mutate: login, data, isSuccess, onSuccess, isError } = useLogin();
+  const isUserAuthenticated = useloggedInUser(
+    (state) => state.isUserAuthenticated
+  );
+  const setUser = useloggedInUser((state) => state.setUser);
+  const User = useloggedInUser((state) => state.user);
 
-  function Login(e) {
+  function handleLogin(e) {
     e.preventDefault();
     login(loginData);
     setLoginData({ email: "", password: "" });
   }
 
-  if (isSuccess) {
-    setUserToken(data.token);
-  }
+  useEffect(() => {
+    if (isSuccess) {
+      const user = data?.data;
+      setUser(user);
 
-  console.log(data);
+      if (user && user.role === "patient") {
+        redirect("/patientdashboard");
+      } else if (user && user.role === "doctor") {
+        redirect("/doctordashboard");
+      } else {
+        redirect("/login");
+      }
+    }
+  }, [redirect, isSuccess, data]);
 
   return (
     <main className="w-5/6 h-screen md:w-3/6 mx-auto flex items-center">
@@ -44,10 +57,14 @@ export default function Login() {
             <img src={logo} alt="" />
           </span>
         </div>
-        <form onSubmit={Login} className="w-full p-2 pb-2 md:w-5/6 mx-auto">
+        <form
+          onSubmit={handleLogin}
+          className="w-full p-2 pb-2 md:w-5/6 mx-auto"
+        >
           <Label htmlFor="email">Email</Label>
           <Input
             type="text"
+            autoComplete="email"
             value={loginData.email}
             onChange={(e) =>
               setLoginData({ ...loginData, email: e.target.value })
@@ -56,16 +73,17 @@ export default function Login() {
             className=" py-4 mt-4"
             placeholder="johndoe@gmail.com"
           />
-          {isError && !loginData.email ? (
+          {/* {isError && !loginData.email ? (
             <p className="text-red-600 text-sm">{"Please enter Your email"}</p>
           ) : (
             ""
-          )}
+          )} */}
           <Label className="mt-2" htmlFor="password">
             Password
           </Label>
           <Input
             value={loginData.password}
+            autoComplete="new-password"
             onChange={(e) =>
               setLoginData({ ...loginData, password: e.target.value })
             }
@@ -74,13 +92,13 @@ export default function Login() {
             className=" py-4 mt-4"
             placeholder="Enter Password"
           />
-          {isError && !loginData.password ? (
+          {/* {isError && !loginData.password ? (
             <p className="text-red-600 text-sm  mb-4">
               {"Please enter Your Password"}
             </p>
           ) : (
             ""
-          )}
+          )} */}
           <Button className="mb-2 w-full">Sign In</Button>
           <Link to="/sign_up" className="my-2">
             Don't have an account? Sign up Here

@@ -10,7 +10,10 @@ export default function Home() {
     <>
       <Hero />
       <SearchDoctor />
-      <DoctorCard />
+      <div className="w-5/6 mx-auto">
+        <h4 className="font-bold text-2xl mt-8 mb-4">Top Doctors</h4>
+        <DoctorCard />
+      </div>
       <OurPerformance />
       <OurServices />
       <Footer />

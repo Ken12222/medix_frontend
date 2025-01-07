@@ -12,17 +12,25 @@ import { Button } from "@/components/ui/button";
 import medix from "../../imgs/logo.png";
 import { Link } from "react-router-dom";
 import { LuAlignRight, LuX } from "react-icons/lu";
+import useloggedInUser from "@/store/useLogin";
 import { useState } from "react";
+import useLogOut from "@/Pages/Auth/Logout";
 
 export default function Navbar() {
+  const isUserAuthenticated = useloggedInUser(
+    (state) => state.isUserAuthenticated
+  );
+  const handleLogout = useLogOut();
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   function openMenu() {
     setIsMenuOpen(!isMenuOpen);
   }
+
   return (
     <>
       <div className="fixed top-0 right-0 left-0 bg-white w-full h-fit">
-        <div className="w-5/6 mx-auto py-3 h-fit flex justify-between z-10 lg:py-0 lg:hidden">
+        <div className="w-5/6 mx-auto py-4 my-4 h-fit flex justify-between z-10 lg:py-0 lg:hidden">
           <Link to="/">
             <img src={medix} alt="medix_logo" />
           </Link>
@@ -35,7 +43,7 @@ export default function Navbar() {
           </Button>
         </div>
         {isMenuOpen && (
-          <div className="w-screen h-fit bg-deep p-4 z-10 top-0 right-0 left-0 fixed">
+          <div className="w-screen h-fit bg-deep p-4 z-10 right-0 left-0 fixed">
             <NavigationMenu>
               <NavigationMenuList className="flex flex-col">
                 <NavigationMenuItem className="py-2">
@@ -81,20 +89,34 @@ export default function Navbar() {
               </NavigationMenuList>
             </NavigationMenu>
             <NavigationMenu className="flex gap-8 py-2">
-              <NavigationMenuItem className="list-none">
-                <Link
-                  to="sign_up"
-                  className="text-left m-0 text-white text-base"
-                >
-                  Sign Up
-                </Link>
-              </NavigationMenuItem>
-              <Link
-                to="/login"
-                className="px-12 py-2 rounded-lg bg-light hover:bg-deep text-white font-bold"
-              >
-                Login
-              </Link>
+              {isUserAuthenticated ? (
+                <div>
+                  <Button
+                    onClick={() => handleLogout.mutate()}
+                    className="px-12 py-2 rounded-lg bg-light hover:bg-deep text-white font-bold"
+                  >
+                    Logout
+                  </Button>
+                  <Link to="patientdashboard">Profile</Link>
+                </div>
+              ) : (
+                <div className="">
+                  <NavigationMenuItem className="list-none">
+                    <Link
+                      to="sign_up"
+                      className="text-left m-0 text-white text-base"
+                    >
+                      Sign Up
+                    </Link>
+                  </NavigationMenuItem>
+                  <Link
+                    to="/login"
+                    className="px-12 py-2 rounded-lg bg-light hover:bg-deep text-white font-bold"
+                  >
+                    Login
+                  </Link>
+                </div>
+              )}
             </NavigationMenu>
           </div>
         )}
@@ -152,22 +174,34 @@ export default function Navbar() {
           </NavigationMenu>
         </div>
         <div>
-          <NavigationMenu className="flex gap-8 py-2">
-            <NavigationMenuItem className="list-none">
-              <Link
-                to="/sign_up"
-                className="btn cursor-pointer text-left m-0 text-xl text-deep hover:text-light ease-in-out duration-100"
+          {isUserAuthenticated ? (
+            <div>
+              <Button
+                onClick={() => handleLogout.mutate()}
+                className="px-12 py-2 rounded-lg bg-light hover:bg-deep text-white font-bold"
               >
-                Sign Up
+                Logout
+              </Button>
+              <Link to="patientdashboard">Profile</Link>
+            </div>
+          ) : (
+            <div className="flex flex-row gap-2 items-center">
+              <NavigationMenuItem className="list-none">
+                <Link
+                  to="sign_up"
+                  className="text-left m-0 text-deep text-base"
+                >
+                  Sign Up
+                </Link>
+              </NavigationMenuItem>
+              <Link
+                to="/login"
+                className="px-12 py-2 rounded-lg bg-light hover:bg-deep text-white font-bold"
+              >
+                Login
               </Link>
-            </NavigationMenuItem>
-            <Link
-              to="/login"
-              className="px-12 py-2 rounded-lg bg-light hover:bg-deep text-white font-bold"
-            >
-              Login
-            </Link>
-          </NavigationMenu>
+            </div>
+          )}
         </div>
       </div>
     </>
