@@ -1,10 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+import axiosInstance from "../axiosInstance";
 
 async function getDoctor() {
   try {
-    const response = await axios.get("/api/doctor");
-    return response.data;
+    const response = await axiosInstance.get("doctor");
+    const data = response.data;
+    return data;
   } catch (error) {
     console.error(error);
   }

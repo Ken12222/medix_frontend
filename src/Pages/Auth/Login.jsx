@@ -18,7 +18,7 @@ import useloggedInUser from "@/store/useLogin";
 export default function Login() {
   const redirect = useNavigate();
   const [loginData, setLoginData] = useState({ email: "", password: "" });
-  const { mutate: login, data, isSuccess, onSuccess, isError } = useLogin();
+  const { mutate: login, data, isSuccess, isError } = useLogin();
   const isUserAuthenticated = useloggedInUser(
     (state) => state.isUserAuthenticated
   );
@@ -27,19 +27,21 @@ export default function Login() {
 
   function handleLogin(e) {
     e.preventDefault();
+
     login(loginData);
     setLoginData({ email: "", password: "" });
   }
 
   useEffect(() => {
     if (isSuccess) {
+      //console.log(data?.data);
       const user = data?.data;
       setUser(user);
 
       if (user && user.role === "patient") {
-        redirect("/patientdashboard");
+        redirect("/patient");
       } else if (user && user.role === "doctor") {
-        redirect("/doctordashboard");
+        redirect("/doctor");
       } else {
         redirect("/login");
       }
@@ -48,13 +50,10 @@ export default function Login() {
 
   return (
     <main className="w-5/6 h-screen md:w-3/6 mx-auto flex items-center">
-      <div className="w-full md:w-2/3 lg:w-2/3 h-96 mx-auto border-2 rounded-lg grid grid-cols">
+      <div className="w-full md:w-2/3 lg:w-2/3 h-96 mx-auto bg-gray-50 border-2 rounded-lg grid grid-cols">
         <div className=" rounded-lg pt-4 md:my-auto">
           <span className="flex justify-center gap-2">
-            <h1 className="text-center my-auto font-bold text-2xl">
-              Welcome to
-            </h1>
-            <img src={logo} alt="" />
+            <h1 className="text-center my-auto font-bold text-l">Sign In</h1>
           </span>
         </div>
         <form
@@ -73,11 +72,12 @@ export default function Login() {
             className=" py-4 mt-4"
             placeholder="johndoe@gmail.com"
           />
-          {/* {isError && !loginData.email ? (
-            <p className="text-red-600 text-sm">{"Please enter Your email"}</p>
+
+          {isError && !loginData.email ? (
+            <p className="text-red-600 text-sm">{"Email is required"}</p>
           ) : (
             ""
-          )} */}
+          )}
           <Label className="mt-2" htmlFor="password">
             Password
           </Label>
@@ -92,14 +92,14 @@ export default function Login() {
             className=" py-4 mt-4"
             placeholder="Enter Password"
           />
-          {/* {isError && !loginData.password ? (
+          {isError && !loginData.password ? (
             <p className="text-red-600 text-sm  mb-4">
-              {"Please enter Your Password"}
+              {"Password is required"}
             </p>
           ) : (
             ""
-          )} */}
-          <Button className="mb-2 w-full">Sign In</Button>
+          )}
+          <Button className="my-2 w-full">Sign In</Button>
           <Link to="/sign_up" className="my-2">
             Don't have an account? Sign up Here
           </Link>

@@ -24,7 +24,6 @@ export default function useLogOut() {
     mutationFn: LogUserOut,
     onSuccess: () => {
       setLogOut(null, null);
-
       redirect("/");
     },
     onError: (error) => {

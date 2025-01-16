@@ -12,7 +12,7 @@ import doc from "../../imgs/dr.jpeg";
 import { useState } from "react";
 import load from "../../imgs/load.gif";
 import { Link } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query"; // Add this import
+import { useQuery } from "@tanstack/react-query";
 import fetchDoctor from "@/apis/Doctors/useFetchDoc";
 
 export default function DoctorCard() {
@@ -22,44 +22,46 @@ export default function DoctorCard() {
   }
 
   const doctors = data?.data;
+
   return (
     <div className="grid grid-cols gap-6 md:grid-cols-4 lg:grid-cols-4 mb-8">
-      {doctors?.map((doctor) => (
-        <Link
-          key={doctor.details.doctor_id}
-          to={`/doctor/${doctor.details.doctor_id}`}
-        >
-          <Card className="bg-gray-100 hover:bg-gray-50">
-            <div>
-              <img
-                className="h-48 w-full object-top object-cover"
-                src={doc} // You can add a fallback image here
-                alt="doctor_img"
-              />
-            </div>
-
-            <CardContent className="p-4 py-2 flex flex-col gap-1">
-              <div className="flex gap-2 items-center">
-                <LuUserRound size="20" className="text-gray-400" />
-                <h2 className="font-bold my-auto">{doctor.user.name}</h2>
+      {doctors &&
+        doctors?.map((doctor) => (
+          <Link
+            key={doctor.details.doctor_id}
+            to={`/doctor/${doctor.details.doctor_id}`}
+          >
+            <Card className="bg-gray-100 hover:bg-gray-50">
+              <div>
+                <img
+                  className="h-48 w-full object-top object-cover"
+                  src={doc} // You can add a fallback image here
+                  alt="doctor_img"
+                />
               </div>
 
-              <div className="flex gap-2 items-center">
-                <LuMail size="20" className="text-gray-400" />
-                <p className="text-gray-400 my-auto text-sm">
-                  {doctor.user.email}
-                </p>
-              </div>
-              <div className="flex gap-2 items-center">
-                <LuLightbulb size="20" className="text-gray-400" />
-                <p className="text-gray-400 my-auto text-sm">
-                  {doctor.details.specialty}
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-        </Link>
-      ))}
+              <CardContent className="p-4 py-2 flex flex-col gap-1">
+                <div className="flex gap-2 items-center">
+                  <LuUserRound size="20" className="text-gray-400" />
+                  <h2 className="font-bold my-auto">{doctor.user.name}</h2>
+                </div>
+
+                <div className="flex gap-2 items-center">
+                  <LuMail size="20" className="text-gray-400" />
+                  <p className="text-gray-400 my-auto text-sm">
+                    {doctor.user.email}
+                  </p>
+                </div>
+                <div className="flex gap-2 items-center">
+                  <LuLightbulb size="20" className="text-gray-400" />
+                  <p className="text-gray-400 my-auto text-sm">
+                    {doctor.details.specialty}
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
+        ))}
     </div>
   );
 }

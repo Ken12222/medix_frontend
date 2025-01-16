@@ -7,13 +7,14 @@ import {
   Routes,
 } from "react-router-dom";
 import Home from "./Pages/Home";
-import SignUp from "./Pages/Auth/sign-up";
+import SignUp from "./Pages/Auth/SignUp";
 import Login from "./Pages/Auth/Login";
 import AddAppointment from "./Pages/Appointment/AddAppointment";
 import DoctorDetails from "./Pages/Doctors/DoctorDetails";
 import Doctor from "./Pages/Doctors/Doctor";
 import useloggedInUser from "./store/useLogin";
 import PatientDasboard from "./Pages/Patient/Dashboard";
+import AppointmentDetails from "./Pages/Appointment/AppointmentDetails";
 
 function App() {
   const isUserAuthenticated = useloggedInUser(
@@ -28,7 +29,12 @@ function App() {
           <Route path="/sign_up" exact element={<SignUp />} />
           <Route path="/doctor" exact element={<Doctor />} />
           <Route path="/doctor/:id" exact element={<DoctorDetails />} />
-          <Route path="/patientdashboard" exact element={<PatientDasboard />} />
+          <Route path="/patient" exact element={<PatientDasboard />} />
+          <Route
+            path="/patient/:patientID/appointment/:appointmentID"
+            exact
+            element={<AppointmentDetails />}
+          />
           <Route path="/login" exact element={<Login />} />
           <Route
             path="/doctor/:id/appointment"

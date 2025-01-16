@@ -13,13 +13,22 @@ import medix from "../../imgs/logo.png";
 import { Link } from "react-router-dom";
 import { LuAlignRight, LuX } from "react-icons/lu";
 import useloggedInUser from "@/store/useLogin";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useLogOut from "@/Pages/Auth/Logout";
+import { useCookies } from "react-cookie";
 
 export default function Navbar() {
   const isUserAuthenticated = useloggedInUser(
     (state) => state.isUserAuthenticated
   );
+  const logout = useloggedInUser((state) => state.logout);
+  const [cookies, setCookie, removieCookie] = useCookies(["XSRF-TOKEN"]);
+  useEffect(() => {
+    if (!cookies["XSRF-TOKEN"]) {
+      logout(null);
+    }
+  }, [cookies]);
+
   const handleLogout = useLogOut();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -89,7 +98,7 @@ export default function Navbar() {
               </NavigationMenuList>
             </NavigationMenu>
             <NavigationMenu className="flex gap-8 py-2">
-              {isUserAuthenticated ? (
+              {isUserAuthenticated && cookies["XSRF-TOKEN"] ? (
                 <div>
                   <Button
                     onClick={() => handleLogout.mutate()}
@@ -97,7 +106,7 @@ export default function Navbar() {
                   >
                     Logout
                   </Button>
-                  <Link to="patientdashboard">Profile</Link>
+                  <Link to="patient">Profile</Link>
                 </div>
               ) : (
                 <div className="">
@@ -174,7 +183,7 @@ export default function Navbar() {
           </NavigationMenu>
         </div>
         <div>
-          {isUserAuthenticated ? (
+          {isUserAuthenticated && cookies["XSRF-TOKEN"] ? (
             <div>
               <Button
                 onClick={() => handleLogout.mutate()}
@@ -182,7 +191,7 @@ export default function Navbar() {
               >
                 Logout
               </Button>
-              <Link to="patientdashboard">Profile</Link>
+              <Link to="patient">Profile</Link>
             </div>
           ) : (
             <div className="flex flex-row gap-2 items-center">
