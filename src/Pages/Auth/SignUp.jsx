@@ -11,7 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useEffect, useState } from "react";
-import useSignUp from "@/apis/Auth/useSIgnUp";
+import useSignUp from "@/apis/Auth/useSignUp";
 
 export default function SignUp() {
   const { data, mutate: signUp, isSuccess, isError } = useSignUp();
