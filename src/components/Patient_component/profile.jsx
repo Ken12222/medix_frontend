@@ -2,10 +2,13 @@ import { Button } from "@/components/ui/button";
 import useloggedInUser from "../../store/useLogin";
 import doc from "../../../imgs/dr.jpeg";
 import axiosInstance from "@/apis/axiosInstance";
+import axios from "axios";
+import { Link } from "react-router-dom";
 
 export default function PatientProfile() {
   const user = useloggedInUser((state) => state.user);
   console.log(user);
+
   return (
     <>
       <p className="pb-4">My Profile</p>
@@ -24,10 +27,13 @@ export default function PatientProfile() {
             )}
           </div>
         </div>
-        {user && user.KYC !== 1 ? (
-          <Button className="bg-red-500" onClick={() => updateUserData()}>
-            Verify
-          </Button>
+        {user && user.patient == null ? (
+          <Link
+            className="bg-red-500 py-2 px-2 rounded-lg text-white text-center"
+            to="/complete_profile"
+          >
+            Setup Profile
+          </Link>
         ) : (
           <Button onClick={() => updateUserData()}>Update</Button>
         )}

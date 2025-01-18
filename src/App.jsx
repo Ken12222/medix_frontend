@@ -14,12 +14,10 @@ import DoctorDetails from "./Pages/Doctors/DoctorDetails";
 import Doctor from "./Pages/Doctors/Doctor";
 import useloggedInUser from "./store/useLogin";
 import PatientDasboard from "./Pages/Patient/Dashboard";
+import CompleteProfileSetup from "./Pages/Patient/completeProfileSetup";
 import AppointmentDetails from "./Pages/Appointment/AppointmentDetails";
 
 function App() {
-  const isUserAuthenticated = useloggedInUser(
-    (state) => state.isUserAuthenticated
-  );
   return (
     <>
       <BrowserRouter>
@@ -34,6 +32,11 @@ function App() {
             path="/patient/:patientID/appointment/:appointmentID"
             exact
             element={<AppointmentDetails />}
+          />
+          <Route
+            path="/complete_profile"
+            exact
+            element={<CompleteProfileSetup />}
           />
           <Route path="/login" exact element={<Login />} />
           <Route
