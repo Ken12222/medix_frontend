@@ -17,12 +17,13 @@ import useFetchMyDoctor from "@/apis/Doctors/useMyDoctor";
 export default function DoctorCard() {
   const { data, isLoading, isError } = useFetchMyDoctor();
   const MyDoctorData = data?.data;
-  // console.log(MyDoctorData);
+
   return (
     <div>
       <p className="my-4">My Doctors</p>
+
       <div className="grid grid-cols gap-6 md:grid-cols-2 lg:grid-cols-2 mb-8">
-        {MyDoctorData &&
+        {Array.isArray(MyDoctorData) && MyDoctorData.length > 0 ? (
           MyDoctorData.map((doctorData) => (
             <Link
               key={doctorData.doctor.id}
@@ -60,12 +61,14 @@ export default function DoctorCard() {
                 </CardContent>
               </Card>
             </Link>
-          ))}
-
-        {!MyDoctorData && (
-          <p className="text-gray-400">
-            {"You have no doctors on your profile"}
-          </p>
+          ))
+        ) : (
+          <div>
+            <p className="text-gray-400 mb-2">
+              There are no doctors on your profile
+            </p>
+            <Button>Add Doctor</Button>
+          </div>
         )}
       </div>
     </div>

@@ -1,72 +1,78 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { useState, useEffect } from "react";
 import { Label } from "@/components/ui/label";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import useVerifyPatient from "@/apis/Patients/useVerifyPatients.jsx";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import useloggedInUser from "@/store/useLogin";
-import axiosInstance from "@/apis/axiosInstance";
-import { useQuery } from "@tanstack/react-query";
+import { useCookies } from "react-cookie";
+import { useNavigate } from "react-router-dom";
+import useUpdatePatientProfile from "@/apis/Patients/useUpdateVerifyPatient";
+import { useParams } from "react-router-dom";
 
-export default function CompleteProfileSetup() {
-  const [patientProfileData, setPatientProfileData] = useState({
+export default function UpdateProfileSetup() {
+  const setUser = useloggedInUser((state) => state.setUser);
+  const {
+    mutate: updateProfile,
+    data,
+    isError,
+    isSuccess,
+    error,
+  } = useUpdatePatientProfile();
+  const [updateData, setUpdateData] = useState({
     contact: "",
     insurance_card: "",
     insurance_card_id: "",
     current_medication: "",
     emergency_contact: "",
   });
-  const {
-    data,
-    mutate: handleVerifyProfile,
-    isSuccess,
-    isError,
-  } = useVerifyPatient();
+  const patientID = useParams();
   const redirect = useNavigate();
-  const setUser = useloggedInUser((state) => state.setUser);
-  const user = useloggedInUser((state) => state.user);
+  const [cookies, setCookie, removeCookie] = useCookies(["XSRF-TOKEN"]);
+  data ? console.log(data?.patient) : "";
 
-  function handleCompletePatientProfile(e) {
-    e.preventDefault();
-
-    handleVerifyProfile(patientProfileData);
-  }
-
+  //doesn't work as expectd. fix it
   useEffect(() => {
+    if (!cookies["XSRF-TOKEN"]) {
+      redirect("/");
+    }
+
     if (isSuccess) {
-      alert("Profile completed successfully");
-      setUser((user.patient = data.user));
-      setPatientProfileData({
+      setUpdateData({
         contact: "",
         insurance_card: "",
         insurance_card_id: "",
         current_medication: "",
         emergency_contact: "",
       });
-
       redirect("/patient");
+      setUser(data?.patient);
     }
     if (isError) {
-      alert("failed to complete profile. Try again later");
+      console.log(error);
     }
-  }, [isSuccess, isError, redirect]);
+  }, [cookies, isSuccess, isError, error]);
+
+  function handleProfileUpdate(e) {
+    e.preventDefault();
+    updateProfile({ patientID, updateData });
+  }
+
   return (
-    <main className="w-5/6 mx-auto my-28">
-      <h2 className="my-2 text-xl font-bold">Complete Your Profile Setup</h2>
-      <form onSubmit={handleCompletePatientProfile}>
+    <main className="w-5/6 mx-auto mt-24">
+      <h2 className="my-2 text-xl font-bold">Update Your Profile Setup</h2>
+      <form onSubmit={handleProfileUpdate}>
         <div className="my-2">
           <Label className="text-base">Contact</Label>
           <Input
             name="contact"
             type="tel"
-            value={patientProfileData.contact}
+            value={updateData.contact}
             onChange={(e) =>
-              setPatientProfileData({
-                ...patientProfileData,
+              setUpdateData({
+                ...updateData,
                 contact: e.target.value,
               })
             }
-            placeholder="Enter Phone. (+23312 345 6789)"
+            placeholder=""
           />
         </div>
 
@@ -75,10 +81,10 @@ export default function CompleteProfileSetup() {
           <Input
             type="text"
             name="insurance_card"
-            value={patientProfileData.insurance_card}
+            value={updateData.insurance_card}
             onChange={(e) =>
-              setPatientProfileData({
-                ...patientProfileData,
+              setUpdateData({
+                ...updateData,
                 insurance_card: e.target.value,
               })
             }
@@ -90,10 +96,10 @@ export default function CompleteProfileSetup() {
           <Input
             type="text"
             name="insurance_card_id"
-            value={patientProfileData.insurance_card_id}
+            value={updateData.insurance_card_id}
             onChange={(e) =>
-              setPatientProfileData({
-                ...patientProfileData,
+              setUpdateData({
+                ...updateData,
                 insurance_card_id: e.target.value,
               })
             }
@@ -105,10 +111,10 @@ export default function CompleteProfileSetup() {
           <Input
             type="text"
             name="current_medication"
-            value={patientProfileData.current_medication}
+            value={updateData.current_medication}
             onChange={(e) =>
-              setPatientProfileData({
-                ...patientProfileData,
+              setUpdateData({
+                ...updateData,
                 current_medication: e.target.value,
               })
             }
@@ -120,10 +126,10 @@ export default function CompleteProfileSetup() {
           <Input
             name="emergency_contact"
             type="tel"
-            value={patientProfileData.emergency_contact}
+            value={updateData.emergency_contact}
             onChange={(e) =>
-              setPatientProfileData({
-                ...patientProfileData,
+              setUpdateData({
+                ...updateData,
                 emergency_contact: e.target.value,
               })
             }

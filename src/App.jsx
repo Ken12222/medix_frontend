@@ -16,6 +16,7 @@ import useloggedInUser from "./store/useLogin";
 import PatientDasboard from "./Pages/Patient/Dashboard";
 import CompleteProfileSetup from "./Pages/Patient/completeProfileSetup";
 import AppointmentDetails from "./Pages/Appointment/AppointmentDetails";
+import UpdateProfileSetup from "./Pages/Patient/updateProfileSetup";
 
 function App() {
   return (
@@ -28,6 +29,11 @@ function App() {
           <Route path="/doctor" exact element={<Doctor />} />
           <Route path="/doctor/:id" exact element={<DoctorDetails />} />
           <Route path="/patient" exact element={<PatientDasboard />} />
+          <Route
+            path="/patient/:patientID"
+            exact
+            element={<UpdateProfileSetup />}
+          />
           <Route
             path="/patient/:patientID/appointment/:appointmentID"
             exact

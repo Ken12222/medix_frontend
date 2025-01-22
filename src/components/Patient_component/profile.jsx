@@ -3,11 +3,15 @@ import useloggedInUser from "../../store/useLogin";
 import doc from "../../../imgs/dr.jpeg";
 import axiosInstance from "@/apis/axiosInstance";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, redirect } from "react-router-dom";
+
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function PatientProfile() {
   const user = useloggedInUser((state) => state.user);
-  console.log(user);
+
+  const redirect = useNavigate();
 
   return (
     <>
@@ -27,7 +31,7 @@ export default function PatientProfile() {
             )}
           </div>
         </div>
-        {user && user.patient == null ? (
+        {user && user.KYC == null ? (
           <Link
             className="bg-red-500 py-2 px-2 rounded-lg text-white text-center"
             to="/complete_profile"
@@ -35,7 +39,12 @@ export default function PatientProfile() {
             Setup Profile
           </Link>
         ) : (
-          <Button onClick={() => updateUserData()}>Update</Button>
+          <Link
+            className="bg-deep py-2 px-2 rounded-lg text-white text-center"
+            to={user && `/patient/${user.patient.id}`}
+          >
+            Update
+          </Link>
         )}
       </div>
     </>

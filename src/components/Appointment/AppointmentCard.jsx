@@ -13,8 +13,7 @@ export default function AppointmentList() {
   return (
     <div className="myappointments pb-4">
       <p className="pb-2">My Appointments</p>
-
-      {appointmentData ? (
+      {Array.isArray(appointmentData) && appointmentData.length > 0 ? (
         appointmentData.map((appointment) => (
           <div
             key={appointment.appointment_id}
@@ -51,7 +50,12 @@ export default function AppointmentList() {
           </div>
         ))
       ) : (
-        <AppointmentButton />
+        <div>
+          <p className="text-gray-400 mb-2">
+            There are no appointments on your profile
+          </p>
+          <AppointmentButton />
+        </div>
       )}
     </div>
   );
