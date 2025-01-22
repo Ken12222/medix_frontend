@@ -46,7 +46,7 @@ function App() {
           />
           <Route path="/login" exact element={<Login />} />
           <Route
-            path="/doctor/:id/appointment"
+            path="/doctor/:doctorID/appointment"
             exact
             element={<AddAppointment />}
           />

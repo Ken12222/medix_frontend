@@ -2,9 +2,12 @@ import DoctorCard from "@/components/doctor-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
-import { useParams, Navigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useParams, Navigate, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
+import fetchDoctor from "../../apis/Doctors/useFetchDoc";
+import useCreateAppointment from "@/apis/Appointments/CreateAppointmentQuery";
+import useloggedInUser from "@/store/useLogin";
 
 export default function AddAppointment() {
   const [appointmentData, setAppointmentData] = useState({
@@ -14,45 +17,75 @@ export default function AddAppointment() {
     appointment_date: "",
     appointment_time: "",
   });
-
-  const { id } = useParams();
-  if (!id || id == null || id == "undefined") {
+  const {
+    mutate: addNewAppointment,
+    data: newAppointmentData,
+    isError: appointmentError,
+    isSuccess: appointmentSuccess,
+  } = useCreateAppointment();
+  const { data, isSuccess, isError, error } = fetchDoctor();
+  const redirect = useNavigate();
+  const doctorID = useParams();
+  const user = useloggedInUser((state) => state.user);
+  if (!doctorID || doctorID == null || doctorID == "undefined") {
     return <Navigate to="/doctor" />;
   }
-  const newAppointment = useMutation({
-    mutationKey: ["newAppointment"],
-    mutationFn: async (newAppointment) => {
-      await fetch(`/api/doctor/${id}/appointment`, {
-        method: "POST",
-        body: JSON.stringify(appointmentData),
-      }).then((response) => response.json());
-    },
-  });
 
+  //format time to HH:mm:ss
+  function formatTime(time) {
+    const [hours, minutes, seconds] = time.split(":");
+    return `${hours}:${minutes}:${seconds || "00"}`; // Add '00' for seconds if not present
+  }
+
+  //handle form submission
   function handleSubmit(e) {
     e.preventDefault();
-    newAppointment.mutate({ appointmentData });
+
+    const appointmentTime = document.getElementById("time").value;
+    const timeWithSeconds = formatTime(appointmentTime);
+    appointmentData.appointment_time = timeWithSeconds;
+    appointmentData.patient_id = user.patient.id;
+    addNewAppointment({
+      doctorID,
+      appointmentData,
+    });
   }
+
+  useEffect(() => {
+    if (appointmentSuccess) {
+      redirect("/patient");
+    }
+    if (appointmentError) {
+      console.log(error);
+    }
+  });
 
   return (
     <>
-      <section className="mt-14">
+      <section className="my-24">
         <form onSubmit={handleSubmit} className="w-5/6 mx-auto p-2">
           <div className="flex flex-col my-4">
             <Label htmlFor="doctor">Doctor</Label>
-            <Input
-              className="mt-2"
-              value={appointmentData.doctor}
+            <select
+              value={appointmentData.doctor_id}
               onChange={(e) =>
                 setAppointmentData({
                   ...appointmentData,
-                  doctor: e.target.value,
+                  doctor_id: e.target.value,
                 })
               }
-              id="doctor"
-              type="text"
-              placeholder="Select Doctor"
-            />
+            >
+              <option value="">Select a doctor</option>
+              {data &&
+                data?.data.map((doctorData) => (
+                  <option
+                    key={doctorData.details.doctor_id}
+                    value={doctorData.details.doctor_id}
+                  >
+                    {doctorData.user.name}
+                  </option>
+                ))}
+            </select>
           </div>
           <div className="flex flex-col my-4">
             <Label htmlFor="reason">Reason</Label>
@@ -73,9 +106,12 @@ export default function AddAppointment() {
             <Label htmlFor="date">Date</Label>
             <Input
               className="mt-2"
-              value={appointmentData.date}
+              value={appointmentData.appointment_date}
               onChange={(e) =>
-                setAppointmentData({ ...appointmentData, date: e.target.value })
+                setAppointmentData({
+                  ...appointmentData,
+                  appointment_date: e.target.value,
+                })
               }
               id="date"
               type="date"
@@ -85,9 +121,12 @@ export default function AddAppointment() {
           <div className="flex flex-col my-4">
             <Label htmlFor="time">Time</Label>
             <Input
-              value={appointmentData.time}
+              value={appointmentData.appointment_time}
               onChange={(e) =>
-                setAppointmentData({ ...appointmentData, time: e.target.value })
+                setAppointmentData({
+                  ...appointmentData,
+                  appointment_time: e.target.value,
+                })
               }
               className="mt-2"
               id="time"
