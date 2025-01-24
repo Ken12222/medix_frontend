@@ -31,10 +31,9 @@ export default function AddAppointment() {
     return <Navigate to="/doctor" />;
   }
 
-  //format time to HH:mm:ss
   function formatTime(time) {
     const [hours, minutes, seconds] = time.split(":");
-    return `${hours}:${minutes}:${seconds || "00"}`; // Add '00' for seconds if not present
+    return `${hours}:${minutes}:${seconds || "00"}`;
   }
 
   //handle form submission
