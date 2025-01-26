@@ -5,15 +5,9 @@ import axios from "axios";
 
 async function fetchAppointmetDetails(patientID, appointmentID) {
   try {
-    const res = await axios.get(
-      `/api/patient/${patientID}/appointment/${appointmentID}`,
-      {
-        headers: {
-          //method: "GET",
-          Accept: "application/json",
-          withCredentials: true,
-        },
-      }
+    await axios.get("sanctum/csrf-token");
+    const res = await axiosInstance.get(
+      `/patient/${patientID}/appointment/${appointmentID}`
     );
     const data = await res.data;
     return data;

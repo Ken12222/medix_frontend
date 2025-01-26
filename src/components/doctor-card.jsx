@@ -20,12 +20,11 @@ export default function DoctorCard() {
   if (isError) {
     return <div className="w-5/6 text-red-500">Error fetching data</div>;
   }
-
   const doctors = data?.data;
 
   return (
     <div className="grid grid-cols gap-6 md:grid-cols-4 lg:grid-cols-4 mb-8">
-      {doctors &&
+      {Array.isArray(doctors) && doctors.length > 0 ? (
         doctors?.map((doctor) => (
           <Link
             key={doctor.details.doctor_id}
@@ -61,7 +60,10 @@ export default function DoctorCard() {
               </CardContent>
             </Card>
           </Link>
-        ))}
+        ))
+      ) : (
+        <p className="text-gray-300">There are no doctors yet</p>
+      )}
     </div>
   );
 }

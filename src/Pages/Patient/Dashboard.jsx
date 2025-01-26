@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import useloggedInUser from "@/store/useLogin";
 import MyDoctor from "../../components/Patient_component/MyDoctor";
 import { useEffect } from "react";
+import Report from "../Reports/ReportIndex";
 
 export default function PatientDasboard() {
   const redirect = useNavigate();
@@ -29,6 +30,7 @@ export default function PatientDasboard() {
       <div className="col-span-2">
         <PatientProfile />
         <MyDoctor />
+        <Report />
       </div>
     </main>
   );

@@ -57,7 +57,7 @@ export default function Navbar() {
               <NavigationMenuList className="flex flex-col">
                 <NavigationMenuItem className="py-2">
                   <Link
-                    to="/doctors"
+                    to="/doctor"
                     className="text-left cursor-pointer m-0 text-white text-base"
                   >
                     Find Doctors

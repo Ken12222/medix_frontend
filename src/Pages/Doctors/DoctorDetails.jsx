@@ -3,10 +3,47 @@ import { LuMail, LuUserRound, LuLightbulb } from "react-icons/lu";
 import doc from "../../../imgs/dr.jpeg";
 import FetchDocDetails from "@/apis/Doctors/useFetchDoctorDetails";
 import load from "../../../imgs/load.gif";
+import { Button } from "@/components/ui/button";
+import useAddDoctorToMyProfile from "@/apis/DoctorPatient/useDoctorMyProfile";
+import { useNavigate, useParams } from "react-router-dom";
+import { useEffect } from "react";
+import useMyDoctor from "@/apis/Doctors/useMyDoctor";
 
 export default function DoctorDetails() {
   const { data, isLoading, isError } = FetchDocDetails();
   const doctorDetails = data?.data;
+  const doctorID = useParams();
+  const redirect = useNavigate();
+  const {
+    data: myDoctor,
+    isSuccess: isMyDoctorSuccess,
+    isError: isMyDoctorError,
+  } = useMyDoctor();
+  const doctor = myDoctor?.data;
+
+  const {
+    data: MyProfileDoctors,
+    mutate: addMyProfileDoctor,
+    isSuccess,
+    isError: MyProfileDoctorError,
+    error,
+  } = useAddDoctorToMyProfile();
+
+  function handleAddDoctor(e) {
+    e.preventDefault();
+    const doctor_id = doctorID.id;
+    addMyProfileDoctor({ doctorID, doctor_id });
+  }
+
+  useEffect(() => {
+    if (isSuccess) {
+      redirect("/patient");
+    }
+    if (MyProfileDoctorError) {
+      console.log(error);
+    }
+  }, [isSuccess, MyProfileDoctorError]);
+
   if (isError) {
     return <div className="w-5/6 text-red-500">Error fetching data</div>;
   }
@@ -63,8 +100,21 @@ export default function DoctorDetails() {
               12:00PM
             </div>
           </div>
-          <div className="w-ful px-4">
+          <div className="w-full flex gap-2 px-4">
             <AppointmentButton />
+            {doctor &&
+              doctor.map((doctor) => (
+                <div key={doctor.doctor_id}>
+                  {doctor.status === "approved" &&
+                  doctorID.id == doctor.doctor_id ? (
+                    ""
+                  ) : (
+                    <Button className="bg-deep" onClick={handleAddDoctor}>
+                      Add Doctor to Profile
+                    </Button>
+                  )}
+                </div>
+              ))}
           </div>
         </div>
       </section>

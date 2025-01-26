@@ -10,6 +10,8 @@ import useCreateAppointment from "@/apis/Appointments/CreateAppointmentQuery";
 import useloggedInUser from "@/store/useLogin";
 
 export default function AddAppointment() {
+  const doctorID = useParams();
+
   const [appointmentData, setAppointmentData] = useState({
     doctor_id: "",
     patient_id: "",
@@ -25,7 +27,6 @@ export default function AddAppointment() {
   } = useCreateAppointment();
   const { data, isSuccess, isError, error } = fetchDoctor();
   const redirect = useNavigate();
-  const doctorID = useParams();
   const user = useloggedInUser((state) => state.user);
   if (!doctorID || doctorID == null || doctorID == "undefined") {
     return <Navigate to="/doctor" />;
