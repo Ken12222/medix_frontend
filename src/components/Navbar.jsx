@@ -23,13 +23,13 @@ export default function Navbar() {
   );
   const redirect = useNavigate();
   const logout = useloggedInUser((state) => state.logout);
-  const [cookies, setCookie, removieCookie] = useCookies(["XSRF-TOKEN"]);
-  useEffect(() => {
-    if (!cookies["XSRF-TOKEN"]) {
-      logout(null);
-      redirect("/");
-    }
-  }, [cookies, redirect]);
+  // const [cookies, setCookie, removieCookie] = useCookies(["XSRF-TOKEN"]);
+  // useEffect(() => {
+  //   if (!cookies["XSRF-TOKEN"]) {
+  //     logout(null);
+  //     redirect("/");
+  //   }
+  // }, [cookies, redirect]);
 
   const handleLogout = useLogOut();
 
@@ -185,7 +185,7 @@ export default function Navbar() {
           </NavigationMenu>
         </div>
         <div>
-          {isUserAuthenticated && cookies["XSRF-TOKEN"] ? (
+          {isUserAuthenticated ? (
             <div>
               <Button
                 onClick={() => handleLogout.mutate()}

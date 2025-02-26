@@ -15,7 +15,7 @@ export default function PatientDasboard() {
   );
   useEffect(() => {
     if (!isUserAuthenticated && !user) {
-      redirect("/");
+      redirect("/login");
     }
   }, [isUserAuthenticated, user]);
 

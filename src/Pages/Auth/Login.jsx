@@ -46,7 +46,16 @@ export default function Login() {
         redirect("/login");
       }
     }
-  }, [redirect, isSuccess, data]);
+    if (isUserAuthenticated) {
+      User.role === "patient" ? redirect("/patient") : redirect("/doctor");
+    }
+    // if (isUserAuthenticated && User !== null && User.role === "patient") {
+    //   redirect("/patient");
+    // }
+    // if (isUserAuthenticated && User !== null && User.role === "doctor") {
+    //   redirect("/doctor");
+    // }
+  }, [redirect, isSuccess, data, isUserAuthenticated, User]);
 
   return (
     <main className="w-5/6 h-screen md:w-3/6 mx-auto flex items-center">
