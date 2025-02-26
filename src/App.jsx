@@ -22,9 +22,6 @@ import MyDoctorIndex from "./Pages/MyDoctors/MyDoctorIndex";
 import UpdateAppointment from "./Pages/Appointment/UpdateAppointment";
 import ReportIndex from "./Pages/Reports/ReportIndex";
 import DoctorDashboard from "./Pages/DoctorPages/DoctorDashboard";
-import ReactGA from "react-ga";
-
-ReactGA.initialize("G-KRKKS26R0M");
 
 function App() {
   return (
