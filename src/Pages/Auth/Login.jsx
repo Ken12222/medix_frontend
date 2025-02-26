@@ -18,7 +18,7 @@ import useloggedInUser from "@/store/useLogin";
 export default function Login() {
   const redirect = useNavigate();
   const [loginData, setLoginData] = useState({ email: "", password: "" });
-  const { mutate: login, data, isSuccess, isError } = useLogin();
+  const { mutate: login, data, isSuccess, isError, error } = useLogin();
   const isUserAuthenticated = useloggedInUser(
     (state) => state.isUserAuthenticated
   );
@@ -73,11 +73,7 @@ export default function Login() {
             placeholder="johndoe@gmail.com"
           />
 
-          {isError && !loginData.email ? (
-            <p className="text-red-600 text-sm">{"Email is required"}</p>
-          ) : (
-            ""
-          )}
+          {isError ? <p className="text-red-600 text-sm">{error}</p> : ""}
           <Label className="mt-2" htmlFor="password">
             Password
           </Label>
@@ -92,13 +88,7 @@ export default function Login() {
             className=" py-4 mt-4"
             placeholder="Enter Password"
           />
-          {isError && !loginData.password ? (
-            <p className="text-red-600 text-sm  mb-4">
-              {"Password is required"}
-            </p>
-          ) : (
-            ""
-          )}
+          {isError ? <p className="text-red-600 text-sm  mb-4">{error}</p> : ""}
           <Button className="my-2 w-full">Sign In</Button>
           <Link to="/sign_up" className="my-2">
             Don't have an account? Sign up Here

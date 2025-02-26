@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/navigation-menu";
 import { Button } from "@/components/ui/button";
 import medix from "../../imgs/logo.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { LuAlignRight, LuX } from "react-icons/lu";
 import useloggedInUser from "@/store/useLogin";
 import { useEffect, useState } from "react";
@@ -21,13 +21,15 @@ export default function Navbar() {
   const isUserAuthenticated = useloggedInUser(
     (state) => state.isUserAuthenticated
   );
+  const redirect = useNavigate();
   const logout = useloggedInUser((state) => state.logout);
   const [cookies, setCookie, removieCookie] = useCookies(["XSRF-TOKEN"]);
   useEffect(() => {
     if (!cookies["XSRF-TOKEN"]) {
       logout(null);
+      redirect("/");
     }
-  }, [cookies]);
+  }, [cookies, redirect]);
 
   const handleLogout = useLogOut();
 
@@ -141,7 +143,7 @@ export default function Navbar() {
             <NavigationMenuList className="flex justify-center gap-4">
               <NavigationMenuItem className="py-2">
                 <Link
-                  className="btn cursor-pointer text-left m-0 text-xl hover:border-b-2 border-light hover:text-light ease-in-out duration-100"
+                  className="btn cursor-pointer text-left m-0 text-base hover:border-b-2 border-light hover:text-light ease-in-out duration-100"
                   to="/doctor"
                 >
                   Find Doctors
@@ -149,7 +151,7 @@ export default function Navbar() {
               </NavigationMenuItem>
               <NavigationMenuItem className="py-2">
                 <Link
-                  className="btn cursor-pointer text-left m-0 text-xl hover:border-b-2 border-light hover:text-light ease-in-out duration-100"
+                  className="btn cursor-pointer text-left m-0 text-base hover:border-b-2 border-light hover:text-light ease-in-out duration-100"
                   to="/service"
                 >
                   Service
@@ -157,7 +159,7 @@ export default function Navbar() {
               </NavigationMenuItem>
               <NavigationMenuItem className="py-2">
                 <Link
-                  className="btn cursor-pointer text-left m-0 text-xl hover:border-b-2 border-light hover:text-light ease-in-out duration-100"
+                  className="btn cursor-pointer text-left m-0 text-base hover:border-b-2 border-light hover:text-light ease-in-out duration-100"
                   to="/medicine"
                 >
                   Medicine
@@ -165,7 +167,7 @@ export default function Navbar() {
               </NavigationMenuItem>
               <NavigationMenuItem className="py-2">
                 <Link
-                  className="btn cursor-pointer text-left m-0 text-xl hover:border-b-2 border-light hover:text-light ease-in-out duration-100"
+                  className="btn cursor-pointer text-left m-0 text-base hover:border-b-2 border-light hover:text-light ease-in-out duration-100"
                   to="/emergency"
                 >
                   Emergency
@@ -173,7 +175,7 @@ export default function Navbar() {
               </NavigationMenuItem>
               <NavigationMenuItem className="py-2">
                 <Link
-                  className="btn cursor-pointer text-left m-0 text-xl hover:border-b-2 border-light hover:text-light ease-in-out duration-100"
+                  className="btn cursor-pointer text-left m-0 text-base hover:border-b-2 border-light hover:text-light ease-in-out duration-100"
                   to="/contact-us"
                 >
                   Contact Us

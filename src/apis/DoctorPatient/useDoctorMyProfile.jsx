@@ -17,7 +17,7 @@ async function addDoctorToMyProfile({ doctorID, doctor_id }) {
 
 const useAddDoctorToMyProfile = () =>
   useMutation({
-    mutationKey: ["DoctorsOnMYProfile"],
+    mutationKey: ["DoctorsOnMyProfile"],
     mutationFn: addDoctorToMyProfile,
   });
 

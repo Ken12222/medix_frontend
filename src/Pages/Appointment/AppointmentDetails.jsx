@@ -6,11 +6,11 @@ import { Button } from "@/components/ui/button";
 import useDeleteAppointment from "../../apis/Appointments/DeleteAppointment";
 import { redirect, useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
+import { Link } from "react-router-dom";
 
 export default function AppointmentDetails() {
   const { data, isError, isLoading } = useFetchAppointmentDetails();
   const appointmentDetails = data?.data;
-  console.log(appointmentDetails);
   const routeID = useParams();
   const redirect = useNavigate();
   const {
@@ -56,6 +56,17 @@ export default function AppointmentDetails() {
                 <p className="px-2"> {appointment.appointment_time}</p>
               </div>
             </div>
+            <div className="flex gap-2">
+              <Link
+                className="bg-light my-auto p-2 px-4 text-white rounded-lg"
+                to={`/doctor/${appointment.doctor.details.doctor_id}/appointment/${appointment.appointment_id}`}
+              >
+                Update
+              </Link>
+              <Button className="bg-red-500" onClick={handleAppointmentDelete}>
+                Delete
+              </Button>
+            </div>
           </div>
         ))
       ) : (
@@ -69,17 +80,6 @@ export default function AppointmentDetails() {
         ) : (
           ""
         )}
-
-        <div className="flex gap-2">
-          <AppointmentButton />
-          {appointmentDetails ? (
-            <Button className="bg-red-500" onClick={handleAppointmentDelete}>
-              Delete
-            </Button>
-          ) : (
-            ""
-          )}
-        </div>
       </div>
     </section>
   );

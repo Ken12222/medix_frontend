@@ -3,15 +3,24 @@ import useloggedInUser from "../../store/useLogin";
 import doc from "../../../imgs/dr.jpeg";
 import axiosInstance from "@/apis/axiosInstance";
 import axios from "axios";
-import { Link, redirect } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
+import useLogOut from "@/Pages/Auth/Logout";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+//import { useNavigate } from "react-router-dom";
 
 export default function PatientProfile() {
   const user = useloggedInUser((state) => state.user);
-
+  const setLogOut = useloggedInUser((state) => state.logout);
+  const handleLogOut = useLogOut();
   const redirect = useNavigate();
+
+  useEffect(() => {
+    if (!user || (!user.patient && user.role !== "patient")) {
+      handleLogOut;
+      setLogOut(null);
+      redirect("/login");
+    }
+  }, [user]);
 
   return (
     <>
@@ -41,7 +50,7 @@ export default function PatientProfile() {
         ) : (
           <Link
             className="bg-deep py-2 px-2 rounded-lg text-white text-center"
-            to={user && `/patient/${user.patient.id}`}
+            to={user && user.patient.id && `/patient/${user.patient.id}`}
           >
             Update
           </Link>

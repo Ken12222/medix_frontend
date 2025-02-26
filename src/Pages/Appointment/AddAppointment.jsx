@@ -29,7 +29,7 @@ export default function AddAppointment() {
   const redirect = useNavigate();
   const user = useloggedInUser((state) => state.user);
   if (!doctorID || doctorID == null || doctorID == "undefined") {
-    return <Navigate to="/doctor" />;
+    return <Navigate to="/doctorlist" />;
   }
 
   function formatTime(time) {
@@ -79,10 +79,10 @@ export default function AddAppointment() {
               {data &&
                 data?.data.map((doctorData) => (
                   <option
-                    key={doctorData.details.doctor_id}
-                    value={doctorData.details.doctor_id}
+                    key={doctorData[0].details.doctor_id}
+                    value={doctorData[0].details.doctor_id}
                   >
-                    {doctorData.user.name}
+                    {doctorData.name}
                   </option>
                 ))}
             </select>

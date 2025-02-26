@@ -8,6 +8,9 @@ import useAddDoctorToMyProfile from "@/apis/DoctorPatient/useDoctorMyProfile";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import useMyDoctor from "@/apis/Doctors/useMyDoctor";
+import ReportIndex from "../Reports/ReportIndex";
+import { Link } from "react-router-dom";
+import useloggedInUser from "@/store/useLogin";
 
 export default function DoctorDetails() {
   const { data, isLoading, isError } = FetchDocDetails();
@@ -28,6 +31,8 @@ export default function DoctorDetails() {
     isError: MyProfileDoctorError,
     error,
   } = useAddDoctorToMyProfile();
+
+  const user = useloggedInUser((state) => state.user);
 
   function handleAddDoctor(e) {
     e.preventDefault();
@@ -100,18 +105,29 @@ export default function DoctorDetails() {
               12:00PM
             </div>
           </div>
-          <div className="w-full flex gap-2 px-4">
+          <div className="w-full flex flex-col gap-2 px-4">
             <AppointmentButton />
+
             {doctor &&
               doctor.map((doctor) => (
                 <div key={doctor.doctor_id}>
                   {doctor.status === "approved" &&
                   doctorID.id == doctor.doctor_id ? (
-                    ""
+                    <div>
+                      <ReportIndex />
+                      <Link
+                        className="text-light text-sm"
+                        to={`/doctor/${doctor.doctor_id}/patient/${user.patient.id}/report`}
+                      >
+                        See All
+                      </Link>
+                    </div>
                   ) : (
-                    <Button className="bg-deep" onClick={handleAddDoctor}>
-                      Add Doctor to Profile
-                    </Button>
+                    <div>
+                      <Button className="bg-deep" onClick={handleAddDoctor}>
+                        Add Doctor to Profile
+                      </Button>
+                    </div>
                   )}
                 </div>
               ))}

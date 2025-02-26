@@ -13,7 +13,7 @@ export default function AppointmentButton() {
 
   function handleCreateAppointmentRoute() {
     if (isUserAuthenticated && !id) {
-      redirect("/doctor");
+      redirect("/doctorlist");
     } else if (!isUserAuthenticated && id) {
       redirect("/login");
     } else {

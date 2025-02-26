@@ -21,8 +21,7 @@ async function loginUser(loginData) {
     const data = await axiosInstance.get("/user");
     return data;
   } catch (error) {
-    console.error("login failed", error.response?.error || error.message);
-    throw error;
+    console.log(error);
   }
 }
 

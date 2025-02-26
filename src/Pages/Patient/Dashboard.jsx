@@ -20,7 +20,7 @@ export default function PatientDasboard() {
   }, [isUserAuthenticated, user]);
 
   return (
-    <main className="my-20 w-5/6 mx-auto grid md:gap-4 grid-cols-1 md:grid-cols-3">
+    <main className="my-20 w-5/6 mx-auto grid md:gap-8 grid-cols-1 md:grid-cols-3">
       <div className="my-4">
         {user && (
           <h1 className="font-bold text-xl mb-4">Welcome, {user.name}</h1>
@@ -30,7 +30,6 @@ export default function PatientDasboard() {
       <div className="col-span-2">
         <PatientProfile />
         <MyDoctor />
-        <Report />
       </div>
     </main>
   );
