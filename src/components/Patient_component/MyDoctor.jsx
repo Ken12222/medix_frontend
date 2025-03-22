@@ -14,7 +14,7 @@ export default function DoctorCard() {
         <p className="my-4">My Doctors</p>
         {user && user.length > 0 ? (
           <Link
-            to={`/patient/${user.patient.id}/doctor`}
+            to={`/patient/${user.patient.id}/doctorlist`}
             className="text-light"
           >
             See All

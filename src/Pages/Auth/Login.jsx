@@ -47,7 +47,9 @@ export default function Login() {
       }
     }
     if (isUserAuthenticated) {
-      User.role === "patient" ? redirect("/patient") : redirect("/doctor");
+      User && User.role === "patient"
+        ? redirect("/patient")
+        : redirect("/doctor");
     }
     // if (isUserAuthenticated && User !== null && User.role === "patient") {
     //   redirect("/patient");

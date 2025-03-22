@@ -18,10 +18,7 @@ export default function MyDoctorList() {
     <main>
       {Array.isArray(MyDoctorData) && MyDoctorData.length > 0 ? (
         MyDoctorData.map((doctorData) => (
-          <Link
-            key={doctorData.doctor.id}
-            to={`/doctor/${doctorData.doctor.id}`}
-          >
+          <Link key={doctorData.id} to={`/doctor/${doctorData.id}`}>
             <Card className="bg-gray-100 hover:bg-gray-50">
               <div>
                 <img
@@ -34,21 +31,19 @@ export default function MyDoctorList() {
               <CardContent className="p-4 py-2 flex flex-col gap-1">
                 <div className="flex gap-2 items-center">
                   <LuUserRound size="20" className="text-gray-400" />
-                  <h2 className="font-bold my-auto">
-                    {doctorData.doctor.user.name}
-                  </h2>
+                  <h2 className="font-bold my-auto">{doctorData.name}</h2>
                 </div>
 
                 <div className="flex gap-2 items-center">
                   <LuMail size="20" className="text-gray-400" />
                   <p className="text-gray-400 my-auto text-sm">
-                    {doctorData.doctor.user.email}
+                    {doctorData.email}
                   </p>
                 </div>
                 <div className="flex gap-2 items-center">
                   <LuLightbulb size="20" className="text-gray-400" />
                   <p className="text-gray-400 my-auto text-sm">
-                    {doctorData.doctor.specialty}
+                    {doctorData[0].details.specialty}
                   </p>
                 </div>
               </CardContent>

@@ -3,13 +3,19 @@ import { Button } from "@/components/ui/button";
 import useApproveRequest from "../../../apis/DoctorPatient/useApproveRequest";
 import useloggedInUser from "@/store/useLogin";
 import { useState } from "react";
+import useDeleteRequest from "@/apis/DoctorPatient/useDeleteRequest";
 
 export default function NewRequest() {
   const { data, isSuccess, isError, error } = useFetchRequest();
   const newRequestData = data?.data;
   const user = useloggedInUser((state) => state.user);
-  //console.log(newRequestData);
-  //console.log(user.doctor.id);
+
+  const {
+    mutate: deleteRequest,
+    data: deleteData,
+    isSuccess: deleteSuccess,
+    isError: deleteError,
+  } = useDeleteRequest();
 
   const {
     mutate: approveRequest,
@@ -17,13 +23,11 @@ export default function NewRequest() {
     isSuccess: approveSuccess,
     isError: approveError,
   } = useApproveRequest();
-  const [status, setStatus] = useState("");
+  const [status, setStatus] = useState("approved");
 
   function handleApproval(patientID, doctorID) {
     //e.preventDefault();
     const ids = { patientID, doctorID };
-    const approved = "approved";
-    setStatus(approved);
     approveRequest({ ids, status });
 
     if (approveSuccess) {
@@ -31,7 +35,15 @@ export default function NewRequest() {
     }
   }
 
-  function handleReject(patientID, doctorID) {}
+  function handleReject(patientID, doctorID) {
+    setStatus("rejected");
+    const ids = { patientID, doctorID };
+    approveRequest({ ids, status });
+
+    if (deleteSuccess) {
+      return <p className="text-green-400">You have rejected the Request</p>;
+    }
+  }
 
   return (
     <section className="">

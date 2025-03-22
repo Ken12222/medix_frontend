@@ -16,6 +16,9 @@ export default function DoctorDashboard() {
     if (!isUserAuthenticated && !user) {
       redirect("/login");
     }
+    if (isUserAuthenticated && user.role === "patient") {
+      redirect("/");
+    }
   }, [isUserAuthenticated, user]);
 
   return (
@@ -32,14 +35,7 @@ export default function DoctorDashboard() {
       </div>
       <DocAppointmentCard />
       <NewRequest />
-      <div className="flex justify-center gap-4 my-4">
-        <p className="border-2 border-gray-300 text-gray-400 text-sm rounded-full p-4">
-          Report
-        </p>
-        <p className="border-2 border-gray-300 text-gray-400 text-sm rounded-full p-4">
-          Patient
-        </p>
-      </div>
+      <div className="flex justify-center gap-4 my-4"></div>
     </main>
   );
 }

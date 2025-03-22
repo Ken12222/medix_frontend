@@ -1,19 +1,24 @@
 import axiosInstance from "../axiosInstance";
 import useloggedInUser from "@/store/useLogin";
 import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 
 async function fetchApointment(id, AuthUserRole) {
   if (AuthUserRole === "patient") {
     try {
+      await axios.get("/sanctum/csrf-cookie");
       const response = await axiosInstance.get(`patient/${id}/appointment`);
-      return response.data;
+      const data = response.data;
+      return data;
     } catch (error) {
       console.log(error);
     }
   } else if (AuthUserRole === "doctor") {
     try {
+      await axios.get("/sanctum/csrf-cookie");
       const response = await axiosInstance.get(`doctor/${id}/appointment`);
-      return response.data;
+      const data = response.data;
+      return data;
     } catch (error) {
       console.log(error);
     }

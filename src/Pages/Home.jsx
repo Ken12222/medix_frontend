@@ -14,10 +14,15 @@ export default function Home() {
   const isUserAuthenticated = useloggedInUser(
     (state) => state.isUserAuthenticated
   );
+  const user = useloggedInUser((state) => state.user);
   const redirect = useNavigate();
   useEffect(() => {
-    if (isUserAuthenticated) {
+    if (isUserAuthenticated && user.role === "patient") {
       redirect("/patient");
+    }
+
+    if (isUserAuthenticated && user.role === "doctor") {
+      redirect("/doctor");
     }
   }, [isUserAuthenticated, redirect]);
   const [doctors, setDoctors] = useState([]);

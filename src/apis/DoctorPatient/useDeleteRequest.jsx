@@ -1,7 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
 import axiosInstance from "../axiosInstance";
+import axios from "axios";
 
-async function deleteRequest() {
+async function deleteRequest({ ids }) {
   try {
     await axios.get("/sanctum/csrf-cookie");
     const res = await axiosInstance.delete(

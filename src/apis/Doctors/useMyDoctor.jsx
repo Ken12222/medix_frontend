@@ -1,10 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "../axiosInstance";
 import useloggedInUser from "@/store/useLogin";
+import axios from "axios";
 
 async function FetchMyDoctor(id) {
   try {
-    const res = await axiosInstance.get(`patient/${id}/doctor`);
+    await axios.get("/sanctum/csrf-cookie");
+    const res = await axiosInstance.get(`/doctor?query=${name}`);
     const data = res.data;
     return data;
   } catch (error) {
